@@ -21,17 +21,17 @@ load_dotenv()
 GNUCLEUS_HOST = os.getenv("GNUCLEUS_HOST")
 GNUCLEUS_API_KEY = os.getenv("GNUCLEUS_API_KEY")
 # optional, only need for enterprise user
-GNUCLEUS_ORG_ID = os.getenv("GNUCLEUS_ORG_ID") 
+GNUCLEUS_ORG_ID = os.getenv("GNUCLEUS_ORG_ID")
 
 # Set up the MCP server
-mcp = FastMCP("gNucleus MCP Server", request_timeout=300)
+mcp = FastMCP("gNucleus MCP Server")
 
 # Helper function for gNucleus REST API requests
 def gnucleus_api_request(endpoint: str, payload: Dict = None) -> Dict | None:
     """Make a request to the gNucleus REST API"""
     if payload is None:
         payload = {}
-        
+
     if not all([GNUCLEUS_HOST, GNUCLEUS_API_KEY]):
         print(f"Missing required GNUCLEUS_HOST and GNUCLEUS_API_KEY in .env file", file=sys.stderr)
         return {"message": "Configuration error: Missing API credentials"}
@@ -42,10 +42,10 @@ def gnucleus_api_request(endpoint: str, payload: Dict = None) -> Dict | None:
         "Authorization": f"Bearer {GNUCLEUS_API_KEY}",
         "Content-Type": "application/json"
     }
-    
+
     if GNUCLEUS_ORG_ID:
         payload["org_id"] = GNUCLEUS_ORG_ID
-        
+
     try:
         print(f"Making API request to {url}", file=sys.stderr)
         response = requests.post(url, headers=headers, json=payload)
@@ -74,7 +74,7 @@ def text_to_cad(input: str) -> str:
     # ----- validate/normalize ID -----
     gnucleus_id = str(response.get("id", ""))
     if not gnucleus_id or not gnucleus_id.startswith("gnucleus-"):
-        return f"gNucleus failed to generate CAD for '{input}' and the reponse is {response} "    
+        return f"gNucleus failed to generate CAD for '{input}' and the reponse is {response} "
 
     # ----- build markdown -----
     result_lines: list[str] = []
@@ -134,7 +134,7 @@ if __name__ == "__main__":
     print(f"GNUCLEUS_HOST is {GNUCLEUS_HOST}", file=sys.stderr)
     if GNUCLEUS_ORG_ID:
         print(f"GNUCLEUS_ORG_ID is {GNUCLEUS_ORG_ID}", file=sys.stderr)
-    
+
     # Initialize and run the server
     try:
         mcp.run(transport='stdio')

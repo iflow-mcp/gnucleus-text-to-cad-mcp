@@ -1,0 +1,20 @@
+[project]
+name = "iflow-mcp_gnucleus_text-to-cad-mcp"
+version = "0.1.0"
+description = "gNucleus Text-To-CAD MCP server - transforms text and images into editable CAD models"
+readme = "README.md"
+requires-python = ">=3.7"
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "python-dotenv",
+    "mcp",
+    "requests",
+]
+
+[project.scripts]
+text-to-cad-mcp = "__main__:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

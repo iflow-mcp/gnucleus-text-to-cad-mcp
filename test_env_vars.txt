@@ -1,0 +1,2 @@
+GNUCLEUS_HOST=genai.gnucleus.ai
+GNUCLEUS_API_KEY=test_key
